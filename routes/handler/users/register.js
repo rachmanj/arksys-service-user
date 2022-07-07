@@ -1,21 +1,22 @@
-const bcrypt = require('bcrypt');
-const { User } = require('../../../models');
-const Validator = require('fastest-validator');
+const bcrypt = require("bcrypt");
+const { User } = require("../../../models");
+const Validator = require("fastest-validator");
 const v = new Validator();
 
 module.exports = async (req, res) => {
   const schema = {
-    name: 'string|empty:false',
-    email: 'email|empty:false',
-    password: 'string|min:6',
-    profession: 'string|optional',
+    name: "string|empty:false",
+    username: "string|empty:false",
+    email: "email|empty:false",
+    role: "string|optional",
+    password: "string|min:6",
   };
 
   const validate = v.validate(req.body, schema);
 
   if (validate.length) {
     return res.status(400).json({
-      status: 'error',
+      status: "error",
       message: validate,
     });
   }
@@ -26,8 +27,19 @@ module.exports = async (req, res) => {
 
   if (user) {
     return res.status(409).json({
-      status: 'error',
-      message: 'Email already exist',
+      status: "error",
+      message: "Email already exist",
+    });
+  }
+
+  const username = await User.findOne({
+    where: { email: req.body.username },
+  });
+
+  if (username) {
+    return res.status(409).json({
+      status: "error",
+      message: "Username already exist",
     });
   }
 
@@ -36,17 +48,20 @@ module.exports = async (req, res) => {
   const data = {
     password,
     name: req.body.name,
+    username: req.body.username,
     email: req.body.email,
-    profession: req.body.profession,
-    role: 'student',
+    role: "user",
   };
 
   const createdUser = await User.create(data);
 
   return res.json({
-    status: 'success',
+    status: "success",
     data: {
       id: createdUser.id,
+      name: createdUser.name,
+      username: createdUser.username,
+      email: createdUser.email,
     },
   });
 };

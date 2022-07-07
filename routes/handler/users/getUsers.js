@@ -1,10 +1,10 @@
-const { User } = require('../../../models');
+const { User } = require("../../../models");
 
 module.exports = async (req, res) => {
   const userIds = req.query.user_ids || [];
 
   const sqlOptions = {
-    attributes: ['id', 'name', 'email', 'role', 'profession', 'avatar'],
+    attributes: ["id", "name", "username", "email", "role"],
   };
 
   if (userIds.length) {
@@ -17,13 +17,13 @@ module.exports = async (req, res) => {
 
   if (!users) {
     return res.status(404).json({
-      status: 'error',
-      message: 'Data not found',
+      status: "error",
+      message: "Data not found",
     });
   }
 
   return res.json({
-    status: 'success',
+    status: "success",
     data: users,
   });
 };

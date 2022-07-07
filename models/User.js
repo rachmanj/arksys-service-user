@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define(
-    'User',
+    "User",
     {
       id: {
         type: DataTypes.INTEGER,
@@ -9,6 +9,10 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
       name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      username: {
         type: DataTypes.STRING,
         allowNull: false,
       },
@@ -22,32 +26,23 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
       role: {
-        type: DataTypes.ENUM,
-        values: ['admin', 'student'],
+        type: DataTypes.STRING,
         allowNull: false,
-        defaultValue: 'student',
-      },
-      avatar: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
-      profession: {
-        type: DataTypes.STRING,
-        allowNull: true,
+        defaultValue: "user",
       },
       createdAt: {
-        field: 'created_at',
+        field: "created_at",
         type: DataTypes.DATE,
         allowNull: false,
       },
       updatedAt: {
-        field: 'updated_at',
+        field: "updated_at",
         type: DataTypes.DATE,
         allowNull: false,
       },
     },
     {
-      tableName: 'users',
+      tableName: "users",
       timestamps: true,
     }
   );
